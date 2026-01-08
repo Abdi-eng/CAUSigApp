@@ -2,7 +2,7 @@
 <OfficeApp xsi:type="MailApp" xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xmlns:m="http://schemas.microsoft.com/office/mailappversionoverrides">
   <!-- 1. IMPORTANT: We will change this ID in the next step -->
   <Id>569103c8-0482-4f05-8664-9a8f94b2d0a0</Id>
-  <Version>1.0.0.3</Version>
+  <Version>1.0.0.4</Version>
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="CAU Signature App" />
@@ -120,5 +120,17 @@
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to insert your signature" />
       </bt:LongStrings>
     </Resources>
+    <WebApplicationInfo>
+      <!-- This matches your "appId" from the JSON -->
+      <Id>36ba053f-fc5d-43c7-a517-f633002a0025</Id>
+      
+      <!-- This matches your "identifierUris" from the JSON -->
+      <Resource>api://jolly-field-081c59603.2.azurestaticapps.net/36ba053f-fc5d-43c7-a517-f633002a0025</Resource>
+      
+      <Scopes>
+        <Scope>user.read</Scope>
+        <Scope>user.read.all</Scope>
+      </Scopes>
+    </WebApplicationInfo>
   </VersionOverrides>
 </OfficeApp>
