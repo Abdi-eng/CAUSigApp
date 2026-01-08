@@ -57,24 +57,26 @@ module.exports = async (env, options) => {
         chunks: ["polyfill", "taskpane"],
       }),
       new CopyWebpackPlugin({
-        patterns: [
-          {
-            from: "assets/*",
-            to: "assets/[name][ext][query]",
-          },
-          {
-            from: "manifest*.xml",
-            to: "[name]" + "[ext]",
-            transform(content) {
-              if (dev) {
-                return content;
-              } else {
-                return content.toString().replace(new RegExp(urlDev, "g"), urlProd);
-              }
-            },
-          },
-        ],
-      }),
+  patterns: [
+    {
+      from: "assets/*",
+      to: "assets/[name][ext][query]",
+    },
+    // --- ADD THIS BLOCK ---
+    {
+      from: "index.html",
+      to: "index.html",
+    },
+    // ----------------------
+    {
+      from: "manifest*.xml",
+      to: "[name]" + "[ext]",
+      transform(content) {
+        // ... (keep existing code here)
+      }
+    },
+  ],
+}),
       new HtmlWebpackPlugin({
         filename: "commands.html",
         template: "./src/commands/commands.html",
