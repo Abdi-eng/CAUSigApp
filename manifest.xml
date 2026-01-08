@@ -2,16 +2,16 @@
 <OfficeApp xsi:type="MailApp" xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xmlns:m="http://schemas.microsoft.com/office/mailappversionoverrides">
   <!-- 1. IMPORTANT: We will change this ID in the next step -->
   <Id>569103c8-0482-4f05-8664-9a8f94b2d0a0</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.0.2</Version>
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="CAU Signature App" />
   <Description DefaultValue="Inserts company signature" />
-  <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png" />
+  <IconUrl DefaultValue="https://abdi-eng.github.io/CAUSigApp/assets/icon-64.png" />
+  <HighResolutionIconUrl DefaultValue="https://abdi-eng.github.io/CAUSigApp/assets/icon-128.png" />
   <SupportUrl DefaultValue="https://www.contoso.com" />
   <AppDomains>
-    <AppDomain>https://localhost:3000</AppDomain>
+    <AppDomain>https://abdi-eng.github.io/CAUSigApp</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Mailbox" />
@@ -24,7 +24,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://localhost:3000/taskpane.html" />
+        <SourceLocation DefaultValue="https://abdi-eng.github.io/CAUSigApp/taskpane.html" />
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -98,13 +98,13 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/icon-16.png" />
-        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/icon-32.png" />
-        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-80.png" />
+        <bt:Image id="Icon.16x16" DefaultValue="https://abdi-eng.github.io/CAUSigApp/assets/icon-16.png" />
+        <bt:Image id="Icon.32x32" DefaultValue="https://abdi-eng.github.io/CAUSigApp/assets/icon-32.png" />
+        <bt:Image id="Icon.80x80" DefaultValue="https://abdi-eng.github.io/CAUSigApp/assets/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Commands.Url" DefaultValue="https://localhost:3000/commands.html" />
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html" />
+        <bt:Url id="Commands.Url" DefaultValue="https://abdi-eng.github.io/CAUSigApp/src/commands/commands.html" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://abdi-eng.github.io/CAUSigApp/src/taskpane/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="CAU Signatures" />
