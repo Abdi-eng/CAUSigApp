@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp xsi:type="MailApp" xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides" xmlns:m="http://schemas.microsoft.com/office/mailappversionoverrides">
-  <!-- 1. IMPORTANT: We will change this ID in the next step -->
+  
   <Id>569103c8-0482-4f05-8664-9a8f94b2d0a0</Id>
-  <Version>1.0.0.4</Version>
+  
+  <!-- UPDATED VERSION to ensure upload works -->
+  <Version>1.0.0.7</Version>
+  
   <ProviderName>Contoso</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="CAU Signature App" />
@@ -10,9 +13,11 @@
   <IconUrl DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" />
   <HighResolutionIconUrl DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" />
   <SupportUrl DefaultValue="https://www.contoso.com" />
+  
   <AppDomains>
     <AppDomain>https://jolly-field-081c59603.2.azurestaticapps.net</AppDomain>
   </AppDomains>
+  
   <Hosts>
     <Host Name="Mailbox" />
   </Hosts>
@@ -21,14 +26,17 @@
       <Set Name="Mailbox" MinVersion="1.1" />
     </Sets>
   </Requirements>
+  
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://abdi-eng.github.io/CAUSigApp/taskpane.html" />
+        <!-- FIXED: This was pointing to GitHub. Now points to Azure to match AppDomains -->
+        <SourceLocation DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/taskpane.html" />
         <RequestedHeight>250</RequestedHeight>
       </DesktopSettings>
     </Form>
   </FormSettings>
+  
   <Permissions>ReadWriteItem</Permissions>
   <Rule xsi:type="RuleCollection" Mode="Or">
     <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />
@@ -46,7 +54,6 @@
         <DesktopFormFactor>
           <FunctionFile resid="Commands.Url" />
           
-          <!-- BUTTON FOR READING EMAILS -->
           <ExtensionPoint xsi:type="MessageReadCommandSurface">
             <OfficeTab id="TabDefault">
               <Group id="msgReadGroup">
@@ -70,7 +77,6 @@
             </OfficeTab>
           </ExtensionPoint>
 
-          <!-- BUTTON FOR WRITING EMAILS (Crucial Part) -->
           <ExtensionPoint xsi:type="MessageComposeCommandSurface">
             <OfficeTab id="TabDefault">
               <Group id="msgComposeGroup">
@@ -98,20 +104,15 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <!-- Icons -->
         <bt:Image id="Icon.16x16" DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" />
         <bt:Image id="Icon.32x32" DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" />
         <bt:Image id="Icon.80x80" DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" />
       </bt:Images>
       <bt:Urls>
-        <!-- Notice: We removed "/src/taskpane/" and just used "/taskpane.html" -->
         <bt:Url id="Taskpane.Url" DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/taskpane.html" />
-        
-        <!-- Notice: We removed "/src/commands/" and just used "/commands.html" -->
         <bt:Url id="Commands.Url" DefaultValue="https://jolly-field-081c59603.2.azurestaticapps.net/commands.html" />
       </bt:Urls>
       
-      <!-- Keep your Strings the same -->
       <bt:ShortStrings>
         <bt:String id="GroupLabel" DefaultValue="CAU Signatures" />
         <bt:String id="TaskpaneButton.Label" DefaultValue="Insert Signature" />
@@ -120,13 +121,10 @@
         <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Click to insert your signature" />
       </bt:LongStrings>
     </Resources>
+    
     <WebApplicationInfo>
-      <!-- This matches your "appId" from the JSON -->
       <Id>36ba053f-fc5d-43c7-a517-f633002a0025</Id>
-      
-      <!-- This matches your "identifierUris" from the JSON -->
       <Resource>api://jolly-field-081c59603.2.azurestaticapps.net/36ba053f-fc5d-43c7-a517-f633002a0025</Resource>
-      
       <Scopes>
         <Scope>user.read</Scope>
         <Scope>user.read.all</Scope>
