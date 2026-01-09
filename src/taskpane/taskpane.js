@@ -2,54 +2,119 @@
 
 Office.onReady((info) => {
   if (info.host === Office.HostType.Outlook) {
-    document.getElementById("insert-sig-btn").onclick = runSignatureLogic;
+    // 1. Load saved settings
+    loadSettings();
+
+    // 2. Add listeners to update preview instantly
+    document.getElementById("user-job").addEventListener("input", updateSignature);
+    document.getElementById("user-phone").addEventListener("input", updateSignature);
+
+    // 3. Setup Insert Button
+    document.getElementById("insert-sig-btn").onclick = insertSignature;
   }
 });
 
-async function runSignatureLogic() {
-  try {
-    // 1. Get Basic Data (Always works)
-    const userProfile = Office.context.mailbox.userProfile;
-    let name = userProfile.displayName;
-    let email = userProfile.emailAddress;
-    let jobTitle = "Staff Member"; // Default
-    let phone = ""; 
+function loadSettings() {
+  const settings = Office.context.roamingSettings;
+  const savedJob = settings.get("userJob");
+  const savedPhone = settings.get("userPhone");
 
-    // 2. Generate Signature
-    const signatureHtml = generateHtml(name, email, jobTitle, phone);
+  if (savedJob) document.getElementById("user-job").value = savedJob;
+  if (savedPhone) document.getElementById("user-phone").value = savedPhone;
 
-    // 3. Insert
-    Office.context.mailbox.item.body.setSignatureAsync(
-      signatureHtml,
-      { coercionType: Office.CoercionType.Html },
-      (result) => {
-        if (result.status === Office.AsyncResultStatus.Succeeded) {
-          document.getElementById("status-message").innerText = "Success!";
-        }
-      }
-    );
-
-  } catch (error) {
-    console.error(error);
-    document.getElementById("status-message").innerText = "Error: " + error.message;
-  }
+  updateSignature();
 }
 
-function generateHtml(name, email, title, phone) {
+function updateSignature() {
+  // Get Inputs
+  const job = document.getElementById("user-job").value;
+  const phone = document.getElementById("user-phone").value;
+  
+  // Get Outlook Profile
+  const userProfile = Office.context.mailbox.userProfile;
+  const name = userProfile.displayName;
+  const email = userProfile.emailAddress;
+
+  // Save to Cloud
+  const settings = Office.context.roamingSettings;
+  settings.set("userJob", job);
+  settings.set("userPhone", phone);
+  settings.saveAsync(); 
+
+  // Generate HTML
+  const html = generateHtml(name, email, job, phone);
+
+  // Show Preview
+  document.getElementById("signature-preview").innerHTML = html;
+}
+
+function insertSignature() {
+  const job = document.getElementById("user-job").value;
+  const phone = document.getElementById("user-phone").value;
+  const userProfile = Office.context.mailbox.userProfile;
+  
+  const html = generateHtml(userProfile.displayName, userProfile.emailAddress, job, phone);
+
+  Office.context.mailbox.item.body.setSignatureAsync(
+    html,
+    { coercionType: Office.CoercionType.Html },
+    (result) => {
+      if (result.status === Office.AsyncResultStatus.Succeeded) {
+        document.getElementById("status-message").innerText = "Signature Inserted!";
+        setTimeout(() => document.getElementById("status-message").innerText = "", 3000);
+      }
+    }
+  );
+}
+
+function generateHtml(name, email, job, phone) {
+  // 1. Force Name to Uppercase
+  const displayName = name.toUpperCase();
+  
+  // 2. Defaults
+  const displayJob = job || "Unvan Giriniz"; // "Enter Title" in Turkish
+  const displayPhone = phone || "";
+
+  // 3. The Design (Matches your Screenshot)
+  // We use your Azure URL for the image
   return `
     <br>
-    <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+    <table cellpadding="0" cellspacing="0" style="font-family: Calibri, Arial, sans-serif; font-size: 14px; color: #333333; text-align: left;">
         <tr>
-            <td style="padding-right: 20px; border-right: 2px solid #0078d4; vertical-align: middle;">
-                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="80" height="80" style="display: block;">
+            <!-- LEFT SIDE: LOGO -->
+            <td style="padding-right: 20px; vertical-align: top;">
+                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="110" height="110" style="display: block;">
             </td>
-            <td style="padding-left: 20px;">
-                <strong style="font-size: 18px; color: #2b579a;">${name}</strong><br>
-                <span>${title}</span><br><br>
-                <a href="mailto:${email}" style="text-decoration:none; color:#333;">${email}</a>
-                ${phone ? `<br><span>P: ${phone}</span>` : ""}
+            
+            <!-- RIGHT SIDE: TEXT -->
+            <td style="vertical-align: top; line-height: 1.4;">
+                <!-- NAME (Uppercase & Bold) -->
+                <strong style="font-size: 15px; text-transform: uppercase; color: #000;">${displayName}</strong>
+                <br>
+                
+                <!-- JOB TITLE (Bold) -->
+                <strong style="font-size: 14px; color: #000;">${displayJob}</strong>
+                <br>
+                
+                <!-- PHONE -->
+                <span style="font-size: 13px;">Tel: ${displayPhone}</span>
+                <br>
+                
+                <!-- EMAIL (Blue Link) -->
+                <a href="mailto:${email}" style="font-size: 13px; color: #0563C1; text-decoration: underline;">${email}</a>
+                <br>
+                
+                <!-- ADDRESS (Hardcoded) -->
+                <span style="font-size: 13px;">Fazıl Küçük Cad. No. 80</span>
+                <br>
+                <span style="font-size: 13px;">Ozanköy, Girne – Kuzey Kıbrıs</span>
+                <br>
+                
+                <!-- WEBSITE -->
+                <a href="https://www.cau.edu.tr" style="font-size: 13px; color: #0563C1; text-decoration: underline;">www.cau.edu.tr</a>
             </td>
         </tr>
     </table>
+    <br>
   `;
 }
