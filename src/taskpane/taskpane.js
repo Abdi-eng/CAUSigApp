@@ -6,18 +6,37 @@ Office.onReady((info) => {
   }
 });
 
-function runSignatureLogic() {
-  // 1. Get Basic Data (No SSO required)
-  const userProfile = Office.context.mailbox.userProfile;
-  const displayName = userProfile.displayName;
-  const email = userProfile.emailAddress;
-  
-  // 2. Fallback for Title/Phone
-  const jobTitle = "Staff Member"; 
-  const phone = ""; 
+async function runSignatureLogic() {
+  try {
+    // 1. Get Basic Data (Always works)
+    const userProfile = Office.context.mailbox.userProfile;
+    let name = userProfile.displayName;
+    let email = userProfile.emailAddress;
+    let jobTitle = "Staff Member"; // Default
+    let phone = ""; 
 
-  // 3. Generate HTML
-  const signatureHtml = `
+    // 2. Generate Signature
+    const signatureHtml = generateHtml(name, email, jobTitle, phone);
+
+    // 3. Insert
+    Office.context.mailbox.item.body.setSignatureAsync(
+      signatureHtml,
+      { coercionType: Office.CoercionType.Html },
+      (result) => {
+        if (result.status === Office.AsyncResultStatus.Succeeded) {
+          document.getElementById("status-message").innerText = "Success!";
+        }
+      }
+    );
+
+  } catch (error) {
+    console.error(error);
+    document.getElementById("status-message").innerText = "Error: " + error.message;
+  }
+}
+
+function generateHtml(name, email, title, phone) {
+  return `
     <br>
     <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
         <tr>
@@ -25,24 +44,12 @@ function runSignatureLogic() {
                 <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="80" height="80" style="display: block;">
             </td>
             <td style="padding-left: 20px;">
-                <strong style="font-size: 18px; color: #2b579a;">${displayName}</strong><br>
-                <span>${jobTitle}</span><br><br>
+                <strong style="font-size: 18px; color: #2b579a;">${name}</strong><br>
+                <span>${title}</span><br><br>
                 <a href="mailto:${email}" style="text-decoration:none; color:#333;">${email}</a>
+                ${phone ? `<br><span>P: ${phone}</span>` : ""}
             </td>
         </tr>
     </table>
   `;
-
-  // 4. Insert
-  Office.context.mailbox.item.body.setSignatureAsync(
-    signatureHtml,
-    { coercionType: Office.CoercionType.Html },
-    (result) => {
-        if (result.status === Office.AsyncResultStatus.Succeeded) {
-            document.getElementById("status-message").innerText = "Success!";
-        } else {
-            document.getElementById("status-message").innerText = "Error: " + result.error.message;
-        }
-    }
-  );
 }
