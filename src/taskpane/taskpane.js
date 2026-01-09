@@ -67,7 +67,7 @@ function insertSignature() {
   );
 }
 
-function generateHtml(name, email, job, phone) {
+/*function generateHtml(name, email, job, phone) {
   // 1. Force Name to Uppercase
   const displayName = name.toUpperCase();
   
@@ -111,6 +111,49 @@ function generateHtml(name, email, job, phone) {
                 <br>
                 
                 <!-- WEBSITE -->
+                <a href="https://www.cau.edu.tr" style="font-size: 13px; color: #0563C1; text-decoration: underline;">www.cau.edu.tr</a>
+            </td>
+        </tr>
+    </table>
+    <br>
+  `;
+}*/
+function generateHtml(name, email, job, phone) {
+  const displayName = name.toUpperCase();
+  
+  // Logic to hide empty lines
+  const jobLine = job ? `<strong style="font-size: 14px; color: #000;">${job}</strong><br>` : "";
+  const phoneLine = phone ? `<span style="font-size: 13px;">Tel: ${phone}</span><br>` : "";
+
+  return `
+    <br>
+    <!-- MAIN TABLE: Fixed width of 600px to prevent wrapping -->
+    <table width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; font-family: Calibri, Arial, sans-serif; font-size: 14px; color: #333333; text-align: left;">
+        <tr>
+            <!-- LEFT SIDE: LOGO (Fixed width 155px) -->
+            <!-- The 'border-right' adds the BLUE LINE -->
+            <td width="130" style="width: 130px; padding-right: 15px; border-right: 2px solid #0563C1; vertical-align: top;">
+                <!-- Fixed Image Dimensions -->
+                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="155" height="155" style="display: block; width: 155px; height: 155px;">
+            </td>
+            
+            <!-- RIGHT SIDE: TEXT -->
+            <td style="padding-left: 15px; vertical-align: top; line-height: 1.4;">
+                <strong style="font-size: 15px; text-transform: uppercase; color: #000;">${displayName}</strong>
+                <br>
+                
+                ${jobLine}
+                
+                ${phoneLine}
+                
+                <a href="mailto:${email}" style="font-size: 13px; color: #0563C1; text-decoration: underline;">${email}</a>
+                <br>
+                
+                <span style="font-size: 13px;">Fazıl Küçük Cad. No. 80</span>
+                <br>
+                <span style="font-size: 13px;">Ozanköy, Girne – Kuzey Kıbrıs</span>
+                <br>
+                
                 <a href="https://www.cau.edu.tr" style="font-size: 13px; color: #0563C1; text-decoration: underline;">www.cau.edu.tr</a>
             </td>
         </tr>
