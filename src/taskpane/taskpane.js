@@ -83,7 +83,7 @@ function generateHtml(name, email, job, phone) {
         <tr>
             <!-- LEFT SIDE: LOGO -->
             <td style="padding-right: 20px; vertical-align: top;">
-                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="110" height="110" style="display: block;">
+                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="155" height="155" style="display: block;">
             </td>
             
             <!-- RIGHT SIDE: TEXT -->
