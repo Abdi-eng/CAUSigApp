@@ -12,8 +12,7 @@ function runSignatureLogic() {
   const displayName = userProfile.displayName;
   const email = userProfile.emailAddress;
   
-  // 2. Fallback for Title/Phone (Since we can't reach Exchange without SSO)
-  // You can add input boxes for these in HTML later if you want
+  // 2. Fallback for Title/Phone
   const jobTitle = "Staff Member"; 
   const phone = ""; 
 
@@ -23,12 +22,12 @@ function runSignatureLogic() {
     <table cellpadding="0" cellspacing="0" style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
         <tr>
             <td style="padding-right: 20px; border-right: 2px solid #0078d4; vertical-align: middle;">
-                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="80" height="80">
+                <img src="https://jolly-field-081c59603.2.azurestaticapps.net/assets/logo.png" width="80" height="80" style="display: block;">
             </td>
             <td style="padding-left: 20px;">
                 <strong style="font-size: 18px; color: #2b579a;">${displayName}</strong><br>
                 <span>${jobTitle}</span><br><br>
-                <a href="mailto:${email}">${email}</a>
+                <a href="mailto:${email}" style="text-decoration:none; color:#333;">${email}</a>
             </td>
         </tr>
     </table>
@@ -41,6 +40,8 @@ function runSignatureLogic() {
     (result) => {
         if (result.status === Office.AsyncResultStatus.Succeeded) {
             document.getElementById("status-message").innerText = "Success!";
+        } else {
+            document.getElementById("status-message").innerText = "Error: " + result.error.message;
         }
     }
   );
