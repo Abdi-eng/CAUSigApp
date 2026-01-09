@@ -10,48 +10,55 @@
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 
-    <!-- Microsoft Fluent UI (Standard Office Look & Feel) -->
+    <!-- Microsoft Styles -->
     <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
-
-    <!-- Custom Styles -->
-    <link href="taskpane.css" rel="stylesheet" type="text/css" />
     
     <style>
-        body { padding: 15px; background-color: #f3f2f1; }
+        body { padding: 15px; background-color: #f3f2f1; font-family: 'Segoe UI', sans-serif; }
         .container { background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        h2 { margin-top: 0; color: #333; }
-        .preview-box {
-            border: 1px dashed #666; 
-            padding: 10px; 
-            margin: 15px 0; 
-            background: #fff;
-            min-height: 80px;
+        h2 { margin-top: 0; color: #333; font-size: 18px; margin-bottom: 15px; }
+        label { display: block; font-weight: 600; color: #333; margin-bottom: 5px; }
+        input[type="text"] {
+            width: 100%; box-sizing: border-box; padding: 8px; 
+            border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;
         }
+        .preview-box {
+            border: 1px dashed #666; padding: 10px; margin-bottom: 15px; 
+            background: #fff; min-height: 80px; overflow: auto;
+        }
+        .ms-Button { width: 100%; margin-top: 10px; }
     </style>
 </head>
 
 <body class="ms-font-m ms-Fabric">
 
     <div class="container">
-        <h2 class="ms-font-xl">Your Signature</h2>
-        <p class="ms-font-m">The following signature will be applied to your email:</p>
+        <h2>Your Details</h2>
+        
+        <!-- 1. JOB TITLE INPUT -->
+        <label>Job Title (Unvan)</label>
+        <input type="text" id="user-job" placeholder="e.g. Sales Manager">
 
-        <!-- 1. THE PREVIEW AREA -->
+        <!-- 2. PHONE INPUT -->
+        <label>Phone Number</label>
+        <input type="text" id="user-phone" placeholder="e.g. +90 392 ...">
+
+        <h2 style="margin-top: 20px;">Preview</h2>
+        
+        <!-- 3. PREVIEW BOX -->
         <div id="signature-preview" class="preview-box">
             <p style="color: gray; text-align: center; padding-top: 20px;">Loading preview...</p>
         </div>
 
-        <!-- 2. THE BUTTON (ID matches your JavaScript) -->
+        <!-- 4. INSERT BUTTON -->
         <button id="insert-sig-btn" class="ms-Button ms-Button--primary">
             <span class="ms-Button-label">Insert Signature</span>
         </button>
 
-        <!-- 3. STATUS MESSAGE -->
-        <p id="status-message" style="margin-top: 10px; font-weight: bold;"></p>
+        <p id="status-message" style="margin-top: 10px; font-weight: bold; color: green;"></p>
     </div>
 
-    <!-- Script References -->
+    <!-- Script Reference -->
     <script type="text/javascript" src="taskpane.js"></script>
 </body>
-
 </html>
