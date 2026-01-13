@@ -1,64 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CAU Signature App</title>
-
-    <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
-
-    <!-- Microsoft Styles -->
     <link rel="stylesheet" href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"/>
-    
     <style>
         body { padding: 15px; background-color: #f3f2f1; font-family: 'Segoe UI', sans-serif; }
         .container { background: white; padding: 20px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         h2 { margin-top: 0; color: #333; font-size: 18px; margin-bottom: 15px; }
-        label { display: block; font-weight: 600; color: #333; margin-bottom: 5px; }
-        input[type="text"] {
-            width: 100%; box-sizing: border-box; padding: 8px; 
-            border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;
-        }
         .preview-box {
             border: 1px dashed #666; padding: 10px; margin-bottom: 15px; 
             background: #fff; min-height: 80px; overflow: auto;
         }
         .ms-Button { width: 100%; margin-top: 10px; }
+        #status-message { margin-top: 10px; font-weight: bold; text-align: center; }
     </style>
 </head>
-
 <body class="ms-font-m ms-Fabric">
-
     <div class="container">
-        <h2>Your Details</h2>
+        <h2>Your Signature</h2>
         
-        <!-- 1. JOB TITLE INPUT -->
-        <label>Job Title (Unvan)</label>
-        <input type="text" id="user-job" placeholder="e.g. Sales Manager">
-
-        <!-- 2. PHONE INPUT -->
-        <label>Phone Number</label>
-        <input type="text" id="user-phone" placeholder="e.g. +90 392 ...">
-
-        <h2 style="margin-top: 20px;">Preview</h2>
-        
-        <!-- 3. PREVIEW BOX -->
+        <!-- The Preview Area -->
         <div id="signature-preview" class="preview-box">
-            <p style="color: gray; text-align: center; padding-top: 20px;">Loading preview...</p>
+            <p style="color: gray; text-align: center; padding-top: 20px;">Connecting to CAU Directory...</p>
         </div>
 
-        <!-- 4. INSERT BUTTON -->
+        <!-- The Button -->
         <button id="insert-sig-btn" class="ms-Button ms-Button--primary">
             <span class="ms-Button-label">Insert Signature</span>
         </button>
 
-        <p id="status-message" style="margin-top: 10px; font-weight: bold; color: green;"></p>
+        <p id="status-message"></p>
     </div>
-
-    <!-- Script Reference -->
     <script type="text/javascript" src="taskpane.js"></script>
 </body>
 </html>
