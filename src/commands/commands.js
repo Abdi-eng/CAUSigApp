@@ -1,35 +1,52 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
- * See LICENSE in the project root for license information.
- */
-
 /* global Office */
 
-Office.onReady(() => {
-  // If needed, Office.js is ready to be called.
-});
+// ⬇️ PASTE YOUR AZURE FUNCTION URL HERE (Same one from taskpane.js) ⬇️
+const API_URL = "https://api-cau-signature-d2edhphpf7hbg6g2.westeurope-01.azurewebsites.net/api/GetSignature"; 
 
-/**
- * Shows a notification when the add-in command is executed.
- * @param event {Office.AddinCommands.Event}
- */
-function action(event) {
-  const message = {
-    type: Office.MailboxEnums.ItemNotificationMessageType.InformationalMessage,
-    message: "Performed action.",
-    icon: "Icon.80x80",
-    persistent: true,
-  };
+Office.onReady();
 
-  // Show a notification message.
-  Office.context.mailbox.item.notificationMessages.replaceAsync(
-    "ActionPerformanceNotification",
-    message
-  );
-
-  // Be sure to indicate when the add-in command function is complete.
-  event.completed();
+// This function handles the "OnNewMessageCompose" event
+function autoApplySignature(event) {
+  setSignature(event);
 }
 
-// Register the function with Office.
-Office.actions.associate("action", action);
+async function setSignature(event) {
+  try {
+    const userEmail = Office.context.mailbox.userProfile.emailAddress;
+    
+    // Check if we already have the signature cached to be fast
+    // (Optional optimization, but let's fetch fresh for now)
+    
+    // 1. Fetch from Azure Backend
+    const separator = API_URL.includes("?") ? "&" : "?";
+    const fullUrl = `${API_URL}${separator}email=${userEmail}`;
+    
+    const response = await fetch(fullUrl);
+    
+    if (!response.ok) {
+        console.error("Backend Error");
+        if (event) event.completed(); // Tell Outlook we are done even if failed
+        return;
+    }
+
+    const signatureHtml = await response.text();
+
+    // 2. Set the Signature
+    // setSignatureAsync AUTOMATICALLY replaces/removes any existing Outlook signature
+    Office.context.mailbox.item.body.setSignatureAsync(
+      signatureHtml,
+      { coercionType: Office.CoercionType.Html },
+      (result) => {
+        // 3. Signal completion to Outlook
+        if (event) event.completed();
+      }
+    );
+
+  } catch (error) {
+    console.error(error);
+    if (event) event.completed();
+  }
+}
+
+// Register the function so the Manifest can find it
+Office.actions.associate("autoApplySignature", autoApplySignature);
