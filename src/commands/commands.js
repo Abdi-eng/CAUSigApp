@@ -54,6 +54,55 @@ async function autoApplySignature(event) {
         event.completed();
     }
 }
+/**
+ * Triggered automatically by the Manifest Event
+ */
+async function autoApplySignature(event) {
+    console.log("CAU Signature: autoApplySignature event received.");
+    
+    try {
+        const userEmail = Office.context.mailbox.userProfile.emailAddress;
+        
+        // 1. Fetch fresh HTML from your Azure Function
+        const separator = API_URL.includes("?") ? "&" : "?";
+        const fullUrl = `${API_URL}${separator}email=${encodeURIComponent(userEmail)}&cacheBust=${Date.now()}`;
+        
+        // Timeout after 4 seconds to stay under the 5s Outlook limit
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+        const response = await fetch(fullUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error("Backend Error: " + response.status);
+
+        const signatureHtml = await response.text();
+
+        // 2. FORCE INSERTION & REMOVAL OF OLD SIGNATURE
+        // setSignatureAsync replaces the existing signature block entirely.
+        Office.context.mailbox.item.body.setSignatureAsync(
+            signatureHtml,
+            { 
+                coercionType: Office.CoercionType.Html 
+            },
+            (asyncResult) => {
+                if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+                    console.log("CAU Signature: Successfully applied and replaced old signature.");
+                } else {
+                    console.error("CAU Signature: Failed to set signature: " + JSON.stringify(asyncResult.error));
+                }
+                
+                // 3. Signal completion to Outlook (MANDATORY)
+                event.completed();
+            }
+        );
+
+    } catch (error) {
+        console.error("CAU Signature: Error in autoApplySignature:", error);
+        // Always call completed() to prevent Outlook from blocking the UI
+        event.completed();
+    }
+}
 
 // IMPORTANT: This association must happen at the global level
 Office.actions.associate("autoApplySignature", autoApplySignature);
